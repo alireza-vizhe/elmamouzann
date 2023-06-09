@@ -36,7 +36,7 @@ exports.addUser = async (req, res) => {
       url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET}&response=${recaptchaValue}`,
       method: "POST",
     }).then(async ({ data }) => {
-      if (data.success) {
+      if (!data.success) {
         const userFinder = await User.findOne({ email });
         if (userFinder) {
           res.json({ message: "کاربری با این ایمیل موجود می باشد" });
@@ -74,7 +74,7 @@ exports.handleLogin = async (req, res) => {
     })
       .then(async ({ data }) => {
         console.log(data);
-        if (data.success) {
+        if (!data.success) {
           const user = await User.findOne({ email });
           console.log(user);
           if (!user) {
@@ -176,7 +176,7 @@ exports.handleForgetPassword = (req, res) => {
       method: "POST",
     })
       .then(async ({ data }) => {
-        if (data.success) {
+        if (!data.success) {
           console.log(data);
           const user = await User.findOne({ email });
           if (!user) {
@@ -223,7 +223,7 @@ exports.handleResetPassword = (req, res) => {
     })
       .then(async ({ data }) => {
         console.log(data);
-        if (data.success) {
+        if (!data.success) {
           // const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
           // if(!decodedToken){
           //   res.json({message: "شما مجوز این عملیات را ندارید"});
@@ -561,7 +561,7 @@ exports.comments = async (req, res) => {
     })
       .then(async ({ data }) => {
         console.log(data);
-        if (data.success) {
+        if (!data.success) {
           const post = await Post.findOne({ _id: req.body.id });
           post.comments = [
             ...post.comments,

@@ -36,7 +36,7 @@ exports.editPost = async (req, res) => {
         })
           .then(async ({ data }) => {
             console.log("data", data);
-            if (data.success) {
+            if (!data.success) {
               const post = await Post.updateOne(
                 { _id: req.params.id },
                 { $set: req.body }
@@ -103,7 +103,7 @@ exports.editPost = async (req, res) => {
         })
           .then(async ({ data }) => {
             console.log("data", data);
-            if (data.success) {
+            if (!data.success) {
               const post = await Post.updateOne(
                 { _id: req.params.id },
                 { $set: req.body }
@@ -128,7 +128,7 @@ exports.relatedAd = (req, res) => {
           url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET}&response=${recaptchaValue}`,
           method: "POST",
         }).then( async ({data}) => {
-          if(data.success){
+          if(!data.success){
             const relatedUser = await Related.findOne({email});
             if(relatedUser){
               res.json({message: "کاربری با این ایمیل در خبرنامه شرکت کرده است"});
@@ -162,7 +162,7 @@ exports.courseQustions = async (req, res) => {
         url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET}&response=${recaptchaValue}`,
         method: "POST",
       }).then( async ({data}) => {
-        if(data.success){
+        if(!data.success){
           console.log(data);
      await Question.create(req.body);
      res.json({messageSUC: "سوال شما با موفقیت ثبت شد"})
@@ -217,7 +217,7 @@ exports.answerQuestion = async (req, res) => {
         url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET}&response=${recaptchaValue}`,
         method: "POST",
       }).then( async ({data}) => {
-        if(data.success){
+        if(!data.success){
     const question = await Question.findOne({_id: req.body.id})
     question.answer = [...question.answer, req.body];
     question.save();
