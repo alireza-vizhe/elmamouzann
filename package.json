@@ -26,6 +26,7 @@
     "sharp": "^0.32.1",
     "shortid": "^2.2.16",
     "uuid": "^9.0.0",
+    "yarn": "^1.22.19",
     "zarinpal-checkout": "^0.2.7"
   },
   "devDependencies": {
