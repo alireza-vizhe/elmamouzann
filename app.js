@@ -226,4 +226,4 @@ app.get("/images", async (req, res) => {
 app.use(require("./router/user"));
 app.use(require("./router/admin"));
 
-app.listen(process.env.PORT || 5000, () => console.log(`server started at port ${process.env.PORT}`))
+app.listen(process.env.PORT, () => console.log(`server started at port ${process.env.PORT}`))
