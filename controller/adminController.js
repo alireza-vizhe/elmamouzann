@@ -36,16 +36,16 @@ exports.editPost = async (req, res) => {
         })
           .then(async ({ data }) => {
             console.log("data", data);
-            if (!data.success) {
+            // if (!data.success) {
               const post = await Post.updateOne(
                 { _id: req.params.id },
                 { $set: req.body }
               );
               res.json(post);
               console.log(post);
-            } else {
-              res.json({ message: "مشکلی در اعتبار سنجی کپچا پیش آمد" });
-            }
+            // } else {
+            //   res.json({ message: "مشکلی در اعتبار سنجی کپچا پیش آمد" });
+            // }
           })
           .catch((error) => {
             res.json({ message: "کپچا نا معتبر است" });
