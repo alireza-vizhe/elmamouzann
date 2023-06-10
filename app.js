@@ -34,13 +34,13 @@ const upload = multer({ storage: storage });
 app.post("/upload-image", upload.single("textImage"), function (req, res) {
   console.log("filre", req.file, "dataaaaaaa", req.body);
   const { recaptchaValue } = req.body;
-  axios({
-    url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET}&response=${recaptchaValue}`,
-    method: "POST",
-  })
-    .then(async ({ data }) => {
-      if (!data.success) {
-        console.log("datablulu", data);
+  // axios({
+  //   url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET}&response=${recaptchaValue}`,
+  //   method: "POST",
+  // })
+  //   .then(async ({ data }) => {
+  //     if (!data.success) {
+  //       console.log("datablulu", data);
         try {
           sharp(req.file.buffer)
             .resize(1080, 1080)
@@ -72,16 +72,16 @@ app.post("/upload-image", upload.single("textImage"), function (req, res) {
         } catch (error) {
           console.log("fgfgfgfgfg");
         }
-      } else {
-        res.json({ message: "  در اعتبار سنجی کپچا پیش آمد" });
-      }
-    })
-    .catch((error) => {
-      res.json({ message: "کپچا نا معتبر است" });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    //   } else {
+    //     res.json({ message: "  در اعتبار سنجی کپچا پیش آمد" });
+    //   }
+    // })
+    // .catch((error) => {
+    //   res.json({ message: "کپچا نا معتبر است" });
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // });
 });
 
 //? Upload Profile Image

@@ -46,10 +46,10 @@ const Post = mongoose.Schema({
         type: String,
         required: true
     },
-    // userD: {
-    //     type: String,
-    //     required: true
-    // },
+    userD: {
+        type: String,
+        required: true
+    },
     userId: {
         type: String,
         required: true
@@ -99,8 +99,7 @@ const Post = mongoose.Schema({
         required: true
     },
     progress: {
-        type: Number,
-        default: 0
+        type: String,
     },
     ended: {
         type: String,
@@ -124,8 +123,7 @@ const Post = mongoose.Schema({
         type: String
     },
     suqqestion:{
-        type: Number,
-        default: 0
+        type: String,
     },
     createdAt: {
         type: Date,

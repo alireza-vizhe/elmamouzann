@@ -30,12 +30,12 @@ exports.editPost = async (req, res) => {
 
     try {
         const { recaptchaValue } = req.body;
-        axios({
-          url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET}&response=${recaptchaValue}`,
-          method: "POST",
-        })
-          .then(async ({ data }) => {
-            console.log("data", data);
+        // axios({
+        //   url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET}&response=${recaptchaValue}`,
+        //   method: "POST",
+        // })
+        //   .then(async ({ data }) => {
+            // console.log("data", data);
             // if (!data.success) {
               const post = await Post.updateOne(
                 { _id: req.params.id },
@@ -46,10 +46,10 @@ exports.editPost = async (req, res) => {
             // } else {
             //   res.json({ message: "مشکلی در اعتبار سنجی کپچا پیش آمد" });
             // }
-          })
-          .catch((error) => {
-            res.json({ message: "کپچا نا معتبر است" });
-          });
+          // })
+          // .catch((error) => {
+          //   res.json({ message: "کپچا نا معتبر است" });
+          // });
       } catch (error) {
         res.json({ message: error.message });
       }
