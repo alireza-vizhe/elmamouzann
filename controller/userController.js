@@ -338,7 +338,13 @@ exports.buyCourse = async (req, res) => {
     if(user.prices == 0){
       try {
         // console.log("hahahahahah", req.body);
-        this.checker()
+        post.totalStudents = post.totalStudents + 1;
+        post.monthlyStudents = post.monthlyStudents + 1;
+        post.sells = [...post.sells, req.body.userId];
+        post.save();
+        user.prices = 0;
+        user.coursesInCard = [];
+        user.save();
         // console.log(post, "asdasdasdad");
       } catch (error) {
         console.log(error);
