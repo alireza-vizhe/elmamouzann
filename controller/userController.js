@@ -338,15 +338,7 @@ exports.buyCourse = async (req, res) => {
     if(user.prices == 0){
       try {
         // console.log("hahahahahah", req.body);
-        const post = await Post.findOne({ _id: req.body.courseId });
-        const user = await User.findOne({ _id: req.body.userId });
-        post.totalStudents = post.totalStudents + 1;
-        post.monthlyStudents = post.monthlyStudents + 1;
-        post.sells = [...post.sells, req.body.userId];
-        post.save();
-        user.prices = 0;
-        user.coursesInCard = [];
-        user.save();
+        this.checker()
         // console.log(post, "asdasdasdad");
       } catch (error) {
         console.log(error);
