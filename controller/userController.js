@@ -333,9 +333,26 @@ exports.buyCourse = async (req, res) => {
     // user.prices = 0
     // user.coursesInCard = []
     // user.save()
-    console.log(post.name, post._id, user.prices);
+    // console.log(post.name, post._id, user.prices);
 
-    //! this
+    if(user.prices == 0){
+      try {
+        // console.log("hahahahahah", req.body);
+        const post = await Post.findOne({ _id: req.body.courseId });
+        const user = await User.findOne({ _id: req.body.userId });
+        post.totalStudents = post.totalStudents + 1;
+        post.monthlyStudents = post.monthlyStudents + 1;
+        post.sells = [...post.sells, req.body.userId];
+        post.save();
+        user.prices = 0;
+        user.coursesInCard = [];
+        user.save();
+        // console.log(post, "asdasdasdad");
+      } catch (error) {
+        console.log(error);
+      }
+    }else{
+      //! this
     let params = {
       MerchantID: `97221328-b053-11e7-bfb0-005056a205be`,
       Amount: user.prices,
@@ -366,6 +383,7 @@ exports.buyCourse = async (req, res) => {
       })
       .catch((err) => res.json(err.message));
     //! Until this
+    }
 
     /**
      * PaymentRequest [module]
