@@ -189,7 +189,7 @@ exports.handleForgetPassword = (req, res) => {
             //   expiresIn: "1h"
             // })
 
-            const resetLink = `http://localhost:3000/reset-password/${user._id}`;
+            const resetLink = `https://el-mcqy.onrender.com/reset-password/${user._id}`;
             sendEmail(
               user.email,
               user.fullname,
