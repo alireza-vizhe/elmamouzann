@@ -12,6 +12,7 @@ const sharp = require("sharp");
 const Post = require("./module/PostModel");
 const Image = require("./module/ImageModel");
 const { setHeaders } = require("./middlewares/headers");
+const Articles = require("./module/Articles");
 
 const app = express();
 
@@ -68,6 +69,61 @@ app.post("/upload-image", upload.single("textImage"), function (req, res) {
                   console.log(err);
                 });
               res.json({ messageSUC: "savedddd" });
+            });
+        } catch (error) {
+          console.log("fgfgfgfgfg");
+        }
+    //   } else {
+    //     res.json({ message: "  در اعتبار سنجی کپچا پیش آمد" });
+    //   }
+    // })
+    // .catch((error) => {
+    //   res.json({ message: "کپچا نا معتبر است" });
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // });
+});
+
+
+//* upload Articles image
+app.post("/upload-image-article", upload.single("textImage"), function (req, res) {
+  console.log("filre", req.file, "dataaaaaaa", req.body);
+  const { recaptchaValue } = req.body;
+  // axios({
+  //   url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET}&response=${recaptchaValue}`,
+  //   method: "POST",
+  // })
+  //   .then(async ({ data }) => {
+  //     if (data.success) {
+        // console.log("datablulu", data);
+        try {
+          sharp(req.file.buffer)
+            .resize(1080, 1080)
+            .jpeg({ quality: 30 })
+            .toBuffer()
+            .then((data) => {
+              console.log(req.file, "adsdasadasdadsadadasdsada");
+              const saveImage = new Articles({
+                ...req.body,
+                nameImg: req.body.articleName,
+                img: {
+                  data: data,
+                  contentType: req.file.mimeType,
+                },
+                // user: req.userId,
+                // userId: req.body.userId,
+                // for: req.body.for,
+              });
+              saveImage
+                .save()
+                .then(() => {
+                  console.log("saved");
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+              res.json({ messageSUC: "مقاله جدید ایجاد شد" });
             });
         } catch (error) {
           console.log("fgfgfgfgfg");
@@ -164,7 +220,7 @@ app.post(
           .toBuffer()
           .then(async (data) => {
             // console.log(data);
-            const findToSave = await Image.findOne({ userId: req.body.userId });
+            const findToSave = await Image.findOne({ userId: req.body.userId }); 
             const setter = await Image.updateOne(
               { userId: req.body.userId },
               { $set: req.body }

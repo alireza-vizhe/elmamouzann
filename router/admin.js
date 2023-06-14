@@ -58,7 +58,11 @@ router.get("/teachers-request", adminController.getTeacherRequests);
 router.post("/payment-teacher", adminController.payTeachers);
 router.post("/edit-user-from-admin", adminController.editUserFromAdmin);
 // router.post("/suqqestion-setter", adminController.suqqestions)
-
+router.post("/write-article" , adminController.articles);
+router.get("/articles" , adminController.getArticles);
+router.post("/singe-article/:id", adminController.getSingleArticle);
+router.post("/edit-article/:id" , adminController.editArticles);
+router.post("/delete-article", adminController.deleteArticle);
 
 
 

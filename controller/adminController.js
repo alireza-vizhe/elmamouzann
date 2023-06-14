@@ -5,6 +5,7 @@ const { sendRelatedEmail } = require("../utils/mailer");
 const User = require("../module/UserModel");
 const Question = require("../module/qestionsModel");
 const Teacher = require("../module/teacherModel");
+const Article = require("../module/Articles");
 
 exports.getDashboard = async (req, res) => {
   try {
@@ -77,7 +78,7 @@ exports.create = async (req, res) => {
 
 exports.getAllCourses = async (req, res) => {
     try {
-        const post = await Post.find();
+        const post = await Post.find().sort({_id:-1});
         res.json(post)
     } catch (error) {
         console.log(error);
@@ -183,7 +184,7 @@ exports.courseQustions = async (req, res) => {
 
 exports.getQuestions = async (req, res) => {
   try {
-   const questions = await Question.find();
+   const questions = await Question.find().sort({_id:-1}) ;
     res.json(questions)
   } catch (error) {
     console.log(error);
@@ -312,3 +313,76 @@ exports.editUserFromAdmin = async (req, res) => {
 //     console.log(error);
 //   }
 // }
+
+
+exports.articles = async (req, res) => {
+  console.log(req.body);
+  try {
+    const {articleName} = req.body;
+    const arFinded = await Article.findOne({articleName})
+    if(arFinded){
+      res.json({message: "مقاله ای با این اسم موجود می باشد"});
+    }else{
+      await Article.create(req.body);
+      res.json({messageSUC: "مقاله شما با موفقیت ثبت شد"})
+    }
+    
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+exports.getArticles = async (req, res) => {
+  try {
+    const article = await Article.find();
+    res.json(article)
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+exports.editArticles = async (req, res) => {
+  try {
+    const { recaptchaValue } = req.body;
+    // axios({
+    //   url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET}&response=${recaptchaValue}`,
+    //   method: "POST",
+    // })
+    //   .then(async ({ data }) => {
+    //     console.log("data", data);
+    //     if (data.success) {
+          const article = await Article.updateOne(
+            { _id: req.params.id },
+            { $set: req.body }
+          );
+          res.json({messageSUC: "مقاله با موفقیت ویرایش شد"});
+          console.log(article);
+      //   } else {
+      //     res.json({ message: "مشکلی در اعتبار سنجی کپچا پیش آمد" });
+      //   }
+      // })
+      // .catch((error) => {
+      //   res.json({ message: "کپچا نا معتبر است" });
+      // });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+}
+exports.getSingleArticle = async (req, res) => {
+  // console.log(req.params.id);
+  try {
+    const article = await Article.findById({ _id: req.params.id });
+    console.log(article);
+    res.json(article);
+  } catch (error) {
+    console.log(error);
+  }
+}
+exports.deleteArticle = async (req, res) => {
+  try {
+    await Article.deleteOne({_id: req.body.id})
+    res.json({messageSUC: "مقاله مورد نظر با موفقیت پاک شد"})
+  } catch (error) {
+    console.log(error);
+  }
+}
