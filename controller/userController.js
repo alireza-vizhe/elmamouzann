@@ -346,6 +346,7 @@ exports.buyCourse = async (req, res) => {
         user.coursesInCard = [];
         user.save();
         // console.log(post, "asdasdasdad");
+        res.json({messageSUC: "با موفقیت دانشجوی دوره شدی!"})
       } catch (error) {
         console.log(error);
       }
