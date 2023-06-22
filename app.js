@@ -19,7 +19,8 @@ const app = express();
 
 //* Body Parser
 app.use(cors());
-app.use(express.json());
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
 app.use(setHeaders)
 
 dotenv.config({path: "./config/config.env"})
