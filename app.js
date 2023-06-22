@@ -107,6 +107,7 @@ app.post("/upload-image-article", upload.single("textImage"), function (req, res
               console.log(req.file, "adsdasadasdadsadadasdsada");
               const saveImage = new Articles({
                 ...req.body,
+                category: req.body.category,
                 nameImg: req.body.articleName,
                 img: {
                   data: data,

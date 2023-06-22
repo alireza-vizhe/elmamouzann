@@ -25,7 +25,7 @@ const Articles = mongoose.Schema({
     },
     category: {
         type: String,
-        required: true
+        required: true,
     },
     createdAt: {
         type: Date,
