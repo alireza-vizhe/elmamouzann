@@ -42,6 +42,7 @@ exports.editPost = async (req, res) => {
                 { _id: req.params.id },
                 { $set: req.body }
               );
+              post.inTheFuture = req.body.inTheFuture;
               res.json(post);
               console.log(post);
             // } else {
