@@ -125,7 +125,7 @@ const Post = mongoose.Schema({
     suqqestion:{
         type: String,
     },
-    InTheFuture: {
+    inTheFuture: {
         type: String,
         default: ""
     },
