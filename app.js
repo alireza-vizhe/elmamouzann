@@ -52,6 +52,7 @@ app.post("/upload-image", upload.single("textImage"), function (req, res) {
               console.log(req.file, "adsdasadasdadsadadasdsada");
               const saveImage = new Post({
                 ...req.body,
+                InTheFuture: req.body.InTheFuture,
                 nameImg: req.body.name,
                 img: {
                   data: data,
