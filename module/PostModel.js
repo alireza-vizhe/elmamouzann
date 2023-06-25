@@ -125,6 +125,9 @@ const Post = mongoose.Schema({
     suqqestion:{
         type: String,
     },
+    InTheFuture: {
+        type: String
+    },
     createdAt: {
         type: Date,
         default: Date.now
