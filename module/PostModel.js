@@ -127,7 +127,7 @@ const Post = mongoose.Schema({
     },
     inTheFuture: {
         type: String,
-        default: ""
+        default: "0"
     },
     createdAt: {
         type: Date,

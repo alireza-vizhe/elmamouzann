@@ -296,14 +296,41 @@ exports.checker = async (req, res) => {
     console.log("hahahahahah", req.body);
     const post = await Post.findOne({ _id: req.body.courseId });
     const user = await User.findOne({ _id: req.body.userId });
-    post.totalStudents = post.totalStudents + 1;
+    console.log(user);
+    var data = qs.stringify({
+      'api_key': 'fad1c497-3ce6-4c8a-b88b-33c20c4e8582',
+      'amount': user.prices,
+      'trans_id': req.body.trans_id
+      });
+      // console.log(data.trans_id);
+      var config = {
+        method: 'post',
+        url: `https://nextpay.org/nx/gateway/verify`,
+        data : data
+      };
+
+      axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+        
+        post.totalStudents = post.totalStudents + 1;
     post.monthlyStudents = post.monthlyStudents + 1;
     post.sells = [...post.sells, req.body.userId];
     post.save();
     user.prices = 0;
     user.coursesInCard = [];
     user.save();
-    console.log(post, "asdasdasdad");
+    // console.log(post, "asdasdasdad");
+    res.json({messageSUC: "پرداخت با موفقیت انجام شد"})
+      })
+    // post.totalStudents = post.totalStudents + 1;
+    // post.monthlyStudents = post.monthlyStudents + 1;
+    // post.sells = [...post.sells, req.body.userId];
+    // post.save();
+    // user.prices = 0;
+    // user.coursesInCard = [];
+    // user.save();
+    // console.log(post, "asdasdasdad");
   } catch (error) {
     console.log(error);
   }
@@ -351,167 +378,68 @@ exports.buyCourse = async (req, res) => {
         console.log(error);
       }
     }else{
-      //! this
-    let params = {
-      MerchantID: `97221328-b053-11e7-bfb0-005056a205be`,
-      Amount: user.prices,
-      CallbackURL: "http://localhost:3000/success-pay",
-      Description: `بابت خرید دوره ${post.name} متشکریم`,
-      Email: user.email,
-    };
+    //   //! this
+    // let params = {
+    //   MerchantID: `97221328-b053-11e7-bfb0-005056a205be`,
+    //   Amount: user.prices,
+    //   CallbackURL: "http://localhost:3000/success-pay",
+    //   Description: `بابت خرید دوره ${post.name} متشکریم`,
+    //   Email: user.email,
+    // };
 
-    let options = {
-      method: "POST",
-      url: "https://www.zarinpal.com/pg/rest/WebGate/PaymentRequest.json",
-      header: {
-        "cache-control": "no-cache",
-        "content-type": "application/json",
-      },
-      body: params,
-      json: true,
-    };
+    // let options = {
+    //   method: "POST",
+    //   url: "https://www.zarinpal.com/pg/rest/WebGate/PaymentRequest.json",
+    //   header: {
+    //     "cache-control": "no-cache",
+    //     "content-type": "application/json", 
+    //   },
+    //   body: params,
+    //   json: true,
+    // };
 
-    request(options)
-      .then(async (data) => {
-        res.json({
-          messageURL: `https://zarinpal.com/pg/StartPay/${data.Authority}`,
-          courseId: post._id,
-        });
-        user.coursesIdGeted = [...user.coursesIdGeted, post._id];
-        user.save();
-      })
-      .catch((err) => res.json(err.message));
-    //! Until this
-    }
-
-    /**
-     * PaymentRequest [module]
-     * @return {String} URL [Payement Authority]
-     */
-    // zarinpal
-    //   .PaymentRequest({
-    //     Amount: user.prices, // In Tomans
-    //     CallbackURL: "http://localhost:3000/success-pay",
-    //     Description: `بابت خرید دوره ${post.name} متشکریم`,
-    //     Email: user.email,
-    //     Mobile: user.phone ? user.phone : null,
-    //   })
-    //   .then((response) => {
-    //     // console.log(response);
-    //     if (response.status === 100) {
-    //       zarinpal
-    //         .PaymentVerification({
-    //           Amount: user.prices, // In Tomans
-    //           Authority: response.authority,
-    //         })
-    //         .then((response) => {
-    //           if (response.status === -21) {
-
-    //             post.totalStudents = post.totalStudents + 1;
-    //             post.monthlyStudents = post.monthlyStudents + 1;
-    //             post.sells = [...post.sells, req.body.userId];
-    //             console.log(req.body.postId, req.body.userId);
-    //             post.save();
-    //             console.log("response", response);
-    //             // user.courses = [...user.courses, req.body.postId];
-    //             user.prices = 0
-    //             user.coursesInCard = [];
-    //             user.save();
-
-    //           } else {
-    //             console.log(`Verified! Ref ID: ${response.RefID}`);
-    //           }
-    //         })
-    //         .catch((err) => {
-    //           console.log("asrreere", err)
-    //         });
-    //       res.json({ messageURL: response });
-    //       console.log("asas2222", response);
-    //     } else {
-    //       res.json({ message: "پرداخت با موفقیت انجام نشد!" });
-    //       console.log("lolo");
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
-
-    //   var data = qs.stringify({
-    //     'api_key': '2d382d00-4710-4ebc-8e79-403533c2da19',
-    //     'amount': user.prices,
-    //     'callback_uri': "http://localhost:3000/success-pay",
-    //     'order_id': JSON.stringify(post._id),
-    //     'customer_json_fields': `{"productName": ${post.name}, "id": ${JSON.stringify(post._id)}}`,
-    //   })
-
-    //   console.log("asasasasas", data);
-
-    //   var config = {
-    //     method: 'post',
-    //     url: "https://nextpay.org/nx/gateway/token",
-    //     data: data
-    //   }
-
-    //   axios(config).then(function (response) {
-    //     console.log("شسشسشس", JSON.stringify(response.data));
-    //     user.paymentDetail = response.data
-    //     user.save()
-
-    //     request(config).then(async data => {
-    //   res.json({messageURL : `https://nextpay.org/nx/gateway/payment/${response.data.trans_id}`});
-    // }).catch(err => res.json(err.message))
-
-    //     // res.redirect(`https://nextpay.org/nx/gateway/payment/${response.data.trans_id}`)
-    //   }).catch(function (error) {
-    //     console.log("ارور", error);
-    //   })
-
-    //   var data2 = qs.stringify({
-    //     'api_key': '2d382d00-4710-4ebc-8e79-403533c2da19',
-    //     'amount': user.prices,
-    //     'trans_id': user.paymentDetail.trans_id
+    // request(options)
+    //   .then(async (data) => {
+    //     res.json({
+    //       messageURL: `https://zarinpal.com/pg/StartPay/${data.Authority}`,
+    //       courseId: post._id,
     //     });
-    //     console.log("data2", data2);
-    //     var config2 = {
-    //       method: 'post',
-    //       url: 'https://nextpay.org/nx/gateway/verify',
-    //       data : data2
-    //     };
+    //     user.coursesIdGeted = [...user.coursesIdGeted, post._id];
+    //     user.save();
+    //   })
+    //   .catch((err) => res.json(err.message));
+    // //! Until this
 
-    //     axios(config2)
-    // .then(function (response) {
-    // // console.log(response);
-    // console.log("نهایی",JSON.stringify(response.data));
-    // })
-    // .catch(function (error) {
-    // console.log("نهایsdsی", error);
-    // });
+    var data = qs.stringify({
+      api_key: "fad1c497-3ce6-4c8a-b88b-33c20c4e8582",
+      amount: user.prices,
+      order_id: req.body.userId,
+      customer_phone: "00000000000",
+      custom_json_fields: `{ "productName": ${post.name} , "id": ${post._id} }`,
+      callback_uri: "http://localhost:3000/success-pay",
+    });
+    var config = {
+      method: "post",
+      url: "https://nextpay.org/nx/gateway/token",
+      data: data,
+    };
 
-    // if(user.prices > 0){
-    //   let params = {
-    //     MerchantId: "1ed2c7a3-b2d4-47a4-a05c-dba78b742c8c",
-    //     Amount : user.prices,
-    //     CallBackURL: "http://localhost:5000/courses/payment/checker",
-    //     Description: `بابت خرید دوره ${post.name} متشکریم`,
-    //     Email: user.email
-    //   }
-    //   let options = {
-    //     method: "POST",
-    //     uri: 'https://api.zarinpal.com/pg/v4/payment/request.json',
-    //     headers: {
-    //       'cache-control': "no-cache",
-    //       'content-type': "application/json"
-    //     },
-    //     body: params,
-    //     json: true
-    //   }
-    //   request(options).then(data => {
-    //     console.log("susu", data);
-    //   }).catch(error => console.log('gogo', error))
-    // }
+    axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+        res.json({messageURL: `https://nextpay.org/nx/gateway/payment/${response.data.trans_id}`})
+        // res.redirect(
+        //   `https://nextpay.org/nx/gateway/payment/${response.data.trans_id}`
+        // );
+        // res.writeHead(301, {
+        //   Location: `https://nextpay.org/nx/gateway/payment/${response.data.trans_id}`
+        // }).end();
+        // window.location = `https://nextpay.org/nx/gateway/payment/${response.data.trans_id}`
+        // const TI = JSON.stringify(response.data.trans_id).split('"')[1]
+        // // console.log(JSON.stringify(TI));
+      })
 
-    // user.save();
-    // res.json({messageSUC: "دوره با موفقیت به حساب شما اضافه شد"})
+    }
   } catch (error) {
     console.log(error);
   }
